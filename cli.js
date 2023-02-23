@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import fetch from 'node-fetch';
 
 const args = minimist(process.argv.slice(2));
-const help_message = `Usage: ./galo.sh [options] -[n|s] LATITUDE -[e|w] LONGITUDE -z TIME_ZONE\n  -h            Show this help message and exit.\n  -n, -s        Latitude: N positive; S negative.\n  -e, -w        Longitude: E positive; W negative.\n  -z            Time zone: uses /etc/timezone by default.\n  -d 0-6        Day to retrieve weather: 0 is today; defaults to 1.\n  -v            Verbose output: returns full weather forecast.\n  -j            Echo pretty JSON from open-meteo API and exit.`
+// const help_message = `Usage: ./galo.sh [options] -[n|s] LATITUDE -[e|w] LONGITUDE -z TIME_ZONE\n  -h            Show this help message and exit.\n  -n, -s        Latitude: N positive; S negative.\n  -e, -w        Longitude: E positive; W negative.\n  -z            Time zone: uses /etc/timezone by default.\n  -d 0-6        Day to retrieve weather: 0 is today; defaults to 1.\n  -v            Verbose output: returns full weather forecast.\n  -j            Echo pretty JSON from open-meteo API and exit.`
 const days = args.d
 const timezone = setTimeZone();
 const latitude = setLatitude();
@@ -13,7 +13,13 @@ const longitude = setLongitude();
 
 if (args.h) {
     // displays the help message
-       process.stdout.write(help_message)
+       console.log('Usage: galosh.js [options] -[n|s] LATITUDE -[e|w] LONGITUDE -z TIME_ZONE\n',
+       '    -h            Show this help message and exit.\n',
+       '    -n, -s        Latitude: N positive; S negative.\n',
+       '    -e, -w        Longitude: E positive; W negative.\n',
+       '    -z            Time zone: uses tz.guess() from moment-timezone by default.\n',
+       '    -d 0-6        Day to retrieve weather: 0 is today; defaults to 1.\n',
+       '    -j            Echo pretty JSON from open-meteo API and exit.\n')
        process.exit(0)
     }
 
@@ -57,6 +63,7 @@ if (args.j) {
 }
 
 // retrieves how many hours it will rain for a particular day
+// and writes message accordingly
 const precip = data.daily.precipitation_hours[days]
 
 if (precip != 0) {
